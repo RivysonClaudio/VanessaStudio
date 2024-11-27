@@ -1,0 +1,263 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+
+    font-family: Roboto, sans-serif;
+}
+
+.client-header{
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+.return-clientList{
+    padding: 3px;
+    cursor: pointer;
+}
+
+.header-title{
+    margin: 0% 5%;
+}
+
+.header-title h2{
+    font-family: "PermanentMarker", cursive;
+    color: var(--dark-pink);
+}
+
+.space-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.space-bar h5{
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.clientRegister-content .space-bar:last-child{
+    position: absolute;
+    bottom: 0;
+}
+
+.space-bar legend{
+    width: 100%;
+    text-align: end;
+    font-size: smaller;
+    color: white;
+    font-weight: 600;
+    padding-right: 15px;
+}
+
+.clientRegister-content form{
+    display: grid;
+    min-width: 100%;
+    grid-template-columns: 75% 25%;
+    padding: 20px 0px;
+    border-bottom: 2px solid var(--dark-pink);
+    background-color: white;
+}
+
+.client-information-text-inner-grid{
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    gap: 10px;
+    align-items: center;
+    height: min-content;
+    margin-left: 50px;
+}
+
+.client-information-text-inner-grid legend{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: small;
+    font-weight: 600;
+}
+
+.client-information-text-inner-grid div:nth-child(2){
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.client-information-text-inner-grid div{
+    background-color: var(--light-pink);
+    border-radius: 2px;
+    height: 25px;
+}
+
+.client-information-text-inner-grid input{
+    border: none;
+    background-color: var(--light-pink);
+    border-radius: 2px;
+    height: 25px;
+    width: 100%;
+    padding-left: 5px;
+    outline: none;
+}
+
+.client-address-information-text-inner-grid{
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    gap: 10px;
+    align-items: center;
+    height: min-content;
+    margin-left: 50px;
+}
+
+.client-address-information-text-inner-grid legend{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: small;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.client-address-information-text-inner-grid div:nth-child(2){
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.client-address-information-text-inner-grid input{
+    border: none;
+    background-color: var(--light-pink);
+    border-radius: 2px;
+    height: 25px;
+    width: 100%;
+    padding-left: 5px;
+    outline: none;
+}
+
+.client-address-information-text-inner-grid div{
+    background-color: var(--light-pink);
+    border-radius: 2px;
+    height: 25px;
+}
+
+.clientProfilePictureExpanded{
+    grid-column: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    justify-self: center;
+}
+
+.clientProfilePictureExpanded img{
+    width: 15rem;
+    aspect-ratio: 1;
+    border-radius: 2.5px;
+    object-fit: contain;
+}
+
+.clientProfilePictureExpanded img:hover{
+    box-shadow: 2px 2px 5px var(--mid-pink);
+}
+
+.clientProfilePictureExpanded input{
+    display: none;
+}
+
+.clientRegister-content .space-bar:last-child{
+    position: absolute;
+    bottom: 0;
+}
+
+.clientRegister-content .space-bar:last-child button:nth-child(1){
+    width: 100px;
+    height: 20px;
+    background-color: var(--mid-pink);
+    border: 1px solid var(--dark-pink);
+    border-radius: 5px;
+    color: var(--dark-pink);
+    font-weight: 600;
+    margin: 0px 15px;
+}
+
+.clientRegister-content .space-bar:last-child button:nth-child(2){
+    width: 100px;
+    height: 20px;
+    background-color: var(--dark-pink);
+    border: 1px solid var(--dark-pink);
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0px 15px;
+}
+
+/* CLIENTE REGISTER SERVICES */
+
+.client-services-field{
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+}
+
+.client-services-field > legend{
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    color: rgba(0, 0, 0, 0.5);
+    display: none;
+    font-size: 90%;
+}
+
+.client-services-infos{
+    width: 15%;
+    position: sticky;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    align-items: self-start;
+    padding: 25px 0px 0px 25px;
+}
+
+.client-services-infos legend{
+    width: 100%;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 5px 0px;
+}
+
+.client-services-infos p{
+    text-align: start;
+    padding-bottom: 3px;
+}
+
+.client-services-grid{
+    display: none;
+    grid-template-columns: 10% auto 40%;
+    padding: 20px 50px 20px 0px;
+    gap: 10px;
+    width: 85%;
+    height: min-content;
+}
+
+.client-services-grid legend{
+    font-size: smaller;
+}
+
+.client-services-grid div{
+    height: 25px;
+    background-color: var(--light-pink);
+}
+
+.client-services-grid.active{
+    display: grid;
+}
+
+.client-services-infos.active{
+    display: flex;
+}
+
+.client-services-field > legend.active{
+    display: block;
+}

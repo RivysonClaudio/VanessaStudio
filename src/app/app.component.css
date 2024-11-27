@@ -1,0 +1,181 @@
+header{
+    background-color: var(--mid-pink);
+    display: flex;
+    height: 8vh;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 5px solid white;
+    position: absolute;
+    width: 100vw;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none; 
+}
+
+.logo-container{
+    position: relative;
+}
+
+.logo-inner{
+    display: flex;
+}
+
+.logo-inner h1{
+    color: var(--dark-pink);
+    font-family: 'PermanentMarker', sans-serif;
+    font-size: 300%;
+    transition: transform 300ms ease-in-out;
+}
+
+.logo-inner:hover h1 {
+    transform: scale(1.2);
+}
+
+.logo-inner:hover h1:nth-child(1) {
+    transition-delay: 50ms; /* Primeiro h1 com 50ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(2) {
+    transition-delay: 100ms; /* Segundo h1 com 100ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(3) {
+    transition-delay: 150ms; /* Terceiro h1 com 150ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(4) {
+    transition-delay: 200ms; /* Quarto h1 com 200ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(5) {
+    transition-delay: 250ms; /* Quinto h1 com 250ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(6) {
+    transition-delay: 300ms; /* Sexto h1 com 300ms de atraso */
+}
+
+.logo-inner:hover h1:nth-child(7) {
+    transition-delay: 350ms; /* Sétimo h1 com 350ms de atraso */
+}
+
+.logo-container h6{
+    font-family: 'DancingScript', sans-serif;
+    color: white;
+    font-size: 2rem;
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+}
+
+
+aside{
+    background-color: #F25C93;
+    width: 3.8rem;
+    height: 100vh;
+    color: white;
+    border-right: 3px solid white;
+    padding: 0;
+
+    position: fixed;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+aside svg{
+    width: 28px;
+    height: 28px;
+}
+
+aside legend{
+    font-family: sans-serif;
+    font-size: 65%;
+    margin-top: 8px;
+}
+
+aside ul{
+    padding-top: 8vh;
+    list-style: none;
+    margin: 0;
+    width: 100%;
+}
+
+aside li a{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0px;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px 0px;
+    color: white;
+}
+
+aside li a:hover{
+    background-color: white;
+    color: #F25C93;
+}
+
+aside li:hover svg{
+    fill: #F25C93;
+}
+
+aside ul:nth-child(2){
+    position: absolute;
+    bottom: 0;
+}
+
+main{
+display: flex;
+align-items: center;
+justify-content: center;
+height: calc(92vh);
+width: calc(100vw - 3.8rem);
+position: absolute;
+bottom: 0;
+right: 0;
+overflow: hidden;
+}
+
+.loader-icon{
+display: none;
+
+position: fixed;
+right: 0;
+bottom: 0;
+
+border: 10px solid #F25C93;
+border-left-color: #F2BDD0;
+border-radius: 50%;
+
+width: 40px;
+height: 40px;
+
+animation: loading 1000ms linear infinite;
+
+margin: 50px;
+}
+
+@keyframes loading {
+to{
+    transform: rotate(360deg);
+}
+}
+
+.overlay{
+position: absolute;
+width: 100vw;
+height: 100vh;
+top: 0;
+
+background-color: #00000046;
+
+display: flex;
+align-items: center;
+justify-content: center;
+}
