@@ -167,15 +167,46 @@ to{
 }
 }
 
-.overlay{
-position: absolute;
-width: 100vw;
-height: 100vh;
-top: 0;
+.notification{
+    width: 25%;
+    background-color: #F25C93;
+    border-top: 5px solid white;
+    margin: 10px;
 
-background-color: #00000046;
+    position: fixed;
+    bottom: 0;
+    right: 0;
 
-display: flex;
-align-items: center;
-justify-content: center;
+    display: none;
+    opacity: 0;
+
+    transition: 500ms ease-in-out;
+    z-index: 4;
+    font-family: sans-serif;
+}
+
+.notification.active{
+    display: flex;
+    opacity: 1;
+}
+
+.notification svg{
+    margin: 20px;
+    cursor: pointer;
+
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+}
+
+.notification legend{
+    max-width: 100%;
+    padding: 15px;
+    color: white;
+
+    display: flex;
+    align-items: center;
+
+    word-break: break-word;
 }
