@@ -1,0 +1,262 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+
+    font-family: Roboto, sans-serif;
+}
+
+a{
+    text-decoration: none;
+}
+
+.worker-header{
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+.worker-header h2{
+    font-family: "PermanentMarker", cursive;
+    color: var(--dark-pink);
+    margin: 0% 5%;
+}
+
+.filter-container{
+    display: flex;
+    width: 40%;
+    justify-content: center;
+    position: relative;
+}
+
+.profissional-pesquisar-button{
+    background-color: var(--dark-pink);
+    border-radius: 0% 15% 15% 0%;
+    padding: 4.5px;
+
+    cursor: pointer;
+    
+    height: min-content;
+}
+
+#profissional-pesquisar-filtro{
+    width: 100%;
+    padding: 5px 10px;
+
+    font-size: medium;
+
+    outline: none;
+    border: 1px solid var(--mid-pink);
+    border-radius: 5px 0px 0px 5px;
+}
+
+#profissional-pesquisar-filtro:focus{
+    outline: 1.5px solid var(--dark-pink);
+}
+
+.profissional-pesquisar-button svg{
+    display: flex;
+}
+
+.new-worker-button-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #F2BDD0;
+    border-radius: 25px;
+    padding: 10px 15px;
+
+    cursor: pointer;
+    margin: 0% 5%;
+}
+
+.new-worker-button-container svg{
+    display: flex;
+    transform: rotate(45deg);
+    fill: #F25C93;
+}
+
+.new-worker-button-container legend{
+    color: #F25C93;
+    margin-left: 10px;
+    font-size: 80%;
+}
+
+.new-worker-button-container:hover{
+    background-color: #F2BDD0;
+}
+
+.new-worker-button-container:hover svg{
+    fill: white;
+}
+
+.new-worker-button-container:hover legend{
+    color: white;
+}
+
+.worker-content{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex-grow: 1;
+}
+
+.worker-wrapper{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.space-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.serviceList-content .space-bar:last-child{
+    position: absolute;
+    bottom: 0;
+}
+
+.worker-grid-panel{
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 72px);
+    background-color: white;
+    display: grid;
+    grid-template-areas: 
+    'list-workers view-workers view-workers'
+    'list-workers more-workers more-workers'
+    'list-workers more-workers more-workers'
+    'list-workers more-workers more-workers'
+    'list-workers more-workers more-workers'
+    ;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 2.5fr;
+    overflow: hidden;
+}
+
+.list-workers{
+    grid-area: list-workers;
+    border-right: 3px solid var(--dark-pink);
+    overflow: auto;
+}
+
+.list-workers > legend{
+    text-align: center;
+    padding: 5px;
+    padding-top: 15px;
+}
+
+.worker-list-item{
+    border-bottom: 2px solid var(--mid-pink);
+    padding: 5px;
+    cursor: pointer;
+}
+
+.worker-list-item:hover{
+    border-left: 5px solid var(--mid-pink);
+}
+
+.worker-list-item :nth-child(2){
+    text-align: end;
+    font-size: 90%;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.view-workers{
+    grid-area: view-workers;
+    box-sizing: border-box;
+}
+
+.view-workers form{
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-top: 15px;
+}
+
+.view-workers form div{
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 30px;
+}
+
+.view-workers form label{
+    width: 15%;
+    margin-left: 15px;
+}
+
+.view-workers form input{
+    background-color: var(--light-pink);
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.view-workers form :nth-child(1) input{
+    width: 85%;
+}
+
+.view-workers form :nth-child(2) input{
+    width: 25%;
+}
+
+.view-workers form :nth-child(2) input:nth-of-type(2){
+    margin: 0% 5%;
+}
+
+.view-workers form :nth-child(3) input{
+    width: 35%;
+}
+
+.view-workers form :nth-child(4){
+    display: flex;
+    justify-content: end;
+}
+
+.view-workers form :nth-child(4) :nth-child(1){
+    background-color: transparent;
+    width: 10%;
+    margin-right: 5%;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #F25C93;
+}
+
+.view-workers form :nth-child(4) :nth-child(2){
+    background-color: #F25C93;
+    width: 10%;
+    margin-right: 2%;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    border: 5px solid var(--dark-pink);
+}
+
+.more-workers{
+    grid-area: more-workers;
+    border-top: 3px solid var(--dark-pink);
+    padding: 15px;
+}
+
+.more-workers > legend{
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+}
