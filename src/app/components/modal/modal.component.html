@@ -1,0 +1,11 @@
+<div class="modal-overlay active">
+    <div #confirmationModal class="modal-container">
+        <h2>{{ title }}</h2>
+        <hr>
+        <p [innerHTML]="message"></p>
+        <div class="modal-buttons-container">
+            <button (click)="closeModal()">Cancelar</button>
+            <button (click)="confirmModal()">Confirmar</button>
+        </div>
+    </div>
+</div>
