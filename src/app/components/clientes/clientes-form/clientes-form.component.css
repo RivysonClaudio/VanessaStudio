@@ -149,6 +149,7 @@
     grid-row-start: 1;
     grid-row-end: 3;
     justify-self: center;
+    position: relative;
 }
 
 .clientProfilePictureExpanded img{
@@ -164,6 +165,26 @@
 
 .clientProfilePictureExpanded input{
     display: none;
+}
+
+.clientProfilePictureExpanded span{
+    position: absolute;
+    color: var(--dark-pink);
+    width: 95%;
+    right: 0;
+    bottom: 0;
+    margin: 2.5%;
+    border-radius: 2px;
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    display: none;
+}
+
+.clientProfilePictureExpanded:hover span{
+    background-color: rgba(255, 255, 255, 0.4);
+    transition: 500ms ease-in-out;
+    display: inline;
 }
 
 .clientRegister-content .space-bar:last-child{
@@ -207,7 +228,6 @@
     text-align: center;
     margin-top: 10px;
     color: rgba(0, 0, 0, 0.5);
-    display: none;
     font-size: 90%;
 }
 
@@ -215,7 +235,7 @@
     width: 15%;
     position: sticky;
     top: 0;
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: self-start;
     padding: 25px 0px 0px 25px;
@@ -233,7 +253,7 @@
 }
 
 .client-services-grid{
-    display: none;
+    display: grid;
     grid-template-columns: 10% auto 40%;
     padding: 20px 50px 20px 0px;
     gap: 10px;

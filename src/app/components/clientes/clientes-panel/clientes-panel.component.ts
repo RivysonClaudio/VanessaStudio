@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClienteCartaoComponent } from './cliente-cartao/cliente-cartao.component';
 
@@ -8,13 +8,30 @@ import { ClienteCartaoComponent } from './cliente-cartao/cliente-cartao.componen
   templateUrl: './clientes-panel.component.html',
   styleUrl: './clientes-panel.component.css'
 })
+
 export class ClientesPanelComponent {
   api_url: string = "http://localhost:8080/api/clientes/v1/";
+  @ViewChild('clientSearchbar') filter!: ElementRef;
+  allClients: any[] = [];
   clientes: any[] = [];
 
   constructor(){
     this.getClientsData().then((json: any) => {
       this.clientes = json;
+      this.allClients = json;
+    });
+  }
+
+  ngAfterViewInit() {
+    const filter = this.filter.nativeElement as HTMLInputElement;
+    filter.addEventListener('input', () => {
+      this.clientes = []
+      for(const client of this.allClients){
+          const term: string = `${client.nome}|${client.apelido}|${client.telefones[0].replace(/\D/g, '')}`;
+          if(term.toUpperCase().includes(filter.value.toUpperCase())){
+            this.clientes.push(client);
+          }
+      }
     });
   }
 

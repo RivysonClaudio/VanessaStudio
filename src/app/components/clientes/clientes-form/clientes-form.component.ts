@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-clientes-form',
@@ -8,21 +9,20 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
   templateUrl: './clientes-form.component.html',
   styleUrl: './clientes-form.component.css'
 })
+
 export class ClientesFormComponent {
+  routerType: string = 'register';
   title: string = "CADASTRAR NOVO CLIENTE";
-
   today: String = new Date().toLocaleDateString();
-
   form: FormGroup;
-
   standardPhoto: string = "images/standard-profile-picture.jpg";
   @ViewChild('photoInput') file!: ElementRef;
   imagePreviewSrc: string = this.standardPhoto;
-
   clientId: string | null = null;
   clientData: any;
+  servicesList: any = null;
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute){
+  constructor(private app: AppComponent, private router: Router, private activeRoute: ActivatedRoute){
     this.form = new FormGroup({
       clientName:         new FormControl(),
       clientNick:         new FormControl(),
@@ -39,8 +39,8 @@ export class ClientesFormComponent {
   }
 
   ngOnInit(){
-    this.activeRoute.data.subscribe(data => {
-      if(data['type'] == 'edit'){
+    this.activeRoute.data.subscribe(data => {this.routerType = data['type']});
+      if(this.routerType == 'edit'){
         this.title = "CONSULTA DE CLIENTE"
         this.activeRoute.paramMap.subscribe(param => {
           if(param.get('id') != null){
@@ -66,8 +66,19 @@ export class ClientesFormComponent {
 
                 this.form.get('clientName')?.setValue(this.clientData.nome);
                 this.form.get('clientNick')?.setValue(this.clientData.apelido);
-                this.form.get('clientPhone1')?.setValue(this.clientData.telefones[0]);
+                this.form.get('clientPhone1')?.setValue(this.maskPhoneNumber(this.clientData.telefones[0]));
+                
+                if(this.clientData.telefones[1] != undefined){
+                  this.form.get('clientPhone2')?.setValue(this.maskPhoneNumber(this.clientData.telefones[1]));
+                }
+                if(this.clientData.telefones[2] != undefined){
+                  this.form.get('clientPhone3')?.setValue(this.maskPhoneNumber(this.clientData.telefones[2]));
+                }
                 this.form.get('clientBirth')?.setValue(this.clientData.nascimento);
+                this.form.get('clientStreet')?.setValue(this.clientData.endereco.logradouro);
+                this.form.get('clientNeighborhood')?.setValue(this.clientData.endereco.bairro);
+                this.form.get('clientCity')?.setValue(this.clientData.endereco.localidade);
+                this.form.get('clientPostcode')?.setValue(this.clientData.endereco.cep);
 
               }else{
                 this.router.navigate(["/clientes"])
@@ -83,16 +94,27 @@ export class ClientesFormComponent {
             this.router.navigate(["/clientes"])
           }
       });
-      }
-    })
-    
+
+      this.getServices()
+    }
+
     this.form.get('clientName')?.valueChanges.subscribe(value => {
       const firstName = value.split(' ')[0];
       this.form.get('clientNick')?.setValue(firstName);
     });
 
+    [this.form.get('clientPhone1'), this.form.get('clientPhone2'), this.form.get('clientPhone3')].forEach(input => {
+      input?.valueChanges.subscribe(value => {
+        input?.setValue(this.maskPhoneNumber(value), {emitEvent: false});
+      });
+    });
+
+    this.form.get('clientBirth')?.valueChanges.subscribe(value => {
+      this.form.get('clientBirth')?.setValue(this.maskDateFormat(value), {emitEvent: false});
+    });
+
     this.form.get('clientPostcode')?.valueChanges.subscribe(value => {
-      this.form.get('clientPostcode')?.setValue(this.formatPostCode(value), {emitEvent: false});
+      this.form.get('clientPostcode')?.setValue(this.maskPostCode(value), {emitEvent: false});
 
       if(value.length === 10){
         this.tryToGetPostCodeInfos(value)
@@ -116,13 +138,14 @@ export class ClientesFormComponent {
 
     formData.append('nome'      , this.form.get('clientName')?.value);
     formData.append('apelido'   , this.form.get('clientNick')?.value);
-    formData.append('telefone' , this.form.get('clientPhone1')?.value);
-
-    if(this.form.get('clientPhone2')?.value != null){
-      formData.append('telefone' , this.form.get('clientPhone2')?.value);
+    if(this.form.get('clientPhone1')?.value != null && this.form.get('clientPhone1')?.value != ''){
+      formData.append('telefone' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
     }
-    if(this.form.get('clientPhone3')?.value != null){
-      formData.append('telefone' , this.form.get('clientPhone3')?.value);
+    if(this.form.get('clientPhone2')?.value != null && this.form.get('clientPhone2')?.value != ''){
+      formData.append('telefone' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
+    }
+    if(this.form.get('clientPhone3')?.value != null && this.form.get('clientPhone3')?.value != ''){
+      formData.append('telefone' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
     }
 
     formData.append('nascimento', this.form.get('clientBirth')?.value);
@@ -147,13 +170,118 @@ export class ClientesFormComponent {
     xhr.onload = () => {
       if (xhr.status == 201){
         this.router.navigate(["/clientes"]);
+        this.app.notify("Cliente cadastrado com sucesso!", 3000);
+      }else{
+        this.app.notify("Ops!<br>Foram encontrados erros preenchimento dos dados.", 3000);
       }
     }
 
     xhr.send(formData);
   }
 
-  onFileSelected(e: Event){
+  onEdit(): void{
+    const apiEndpointUpdate: string = "http://localhost:8080/api/clientes/v1/update";
+
+    const formData = new FormData();
+    const input = this.file.nativeElement as HTMLInputElement;
+    const file = input.files && input.files[0] ? input.files[0] : null
+
+    if(file != null){
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("PUT", `${apiEndpointUpdate}?clienteId=${this.clientId}&uriImagemDelete=${this.clientData.fotoPath}`, false);
+  
+      xhr.onload = () => {
+        if (xhr.status == 200){
+          this.app.notify("As alterações foram salvas.", 3000);
+        }
+      }
+  
+      xhr.send(formData);
+    }
+
+    if (this.imagePreviewSrc == this.standardPhoto && this.clientData.fotoPath != 'null'){
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("DELETE", `http://localhost:8080/api/clientes/v1/deleteFile?id=${this.clientId}&urlFile=${this.clientData.fotoPath}`, false);
+  
+      xhr.onload = () => {
+        if (xhr.status == 204){
+          this.clientData.fotoPath = 'null';
+          this.app.notify("As alterações foram salvas.", 3000);
+        }
+      }
+
+      xhr.onerror = () => {
+        this.app.notify("Não foi possível excluir a imagem.", 3000);
+      }
+  
+      xhr.send();
+    }
+
+    formData.append('nome'      , this.form.get('clientName')?.value);
+    formData.append('apelido'   , this.form.get('clientNick')?.value);
+    formData.append('telefone' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
+
+    if(this.form.get('clientPhone2')?.value != null && this.form.get('clientPhone2')?.value != ''){
+      formData.append('telefone' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
+    }
+    if(this.form.get('clientPhone3')?.value != null && this.form.get('clientPhone3')?.value != ''){
+      formData.append('telefone' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
+    }
+
+    formData.append('nascimento', this.form.get('clientBirth')?.value);
+
+    if(this.form.get('clientStreet')?.value != null){
+      formData.append('endereco.logradouro' , this.form.get('clientStreet')?.value);
+    }
+    if(this.form.get('clientPostcode')?.value != null){
+      formData.append('endereco.cep' , this.form.get('clientPostcode')?.value);
+    }
+    if(this.form.get('clientNeighborhood')?.value != null){
+      formData.append('endereco.bairro' , this.form.get('clientNeighborhood')?.value);
+    }
+    if(this.form.get('clientCity')?.value != null){
+      formData.append('endereco.localidade' , this.form.get('clientCity')?.value);
+    }
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("PUT", `${apiEndpointUpdate}?clienteId=${this.clientId}`, false);
+
+    xhr.onload = () => {
+      if (xhr.status == 200){
+        this.app.notify("As alterações foram salvas.", 3000);
+      }
+    }
+
+    xhr.send(formData);
+  }
+
+  onDelete(): void{
+    this.app.openModal({
+      title: "EXCLUIR CLIENTE",
+      message: "Você tem certeza que desejsa excluir o cliente?<br>Uma vez confirmada está ação não poderá ser desfeita."},
+      () => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("DELETE", "http://localhost:8080/api/clientes/v1/deleteCustomer/" + this.clientId, false);
+    
+        xhr.onload = () => {
+          if (xhr.status == 204){
+            this.router.navigate(["/clientes"]);
+            this.app.notify("O cliente foi excluido.", 3000);
+          }
+        }
+    
+        xhr.send();
+    });
+  }
+
+  onFileSelected(e: Event): void{
     const input = e.target as HTMLInputElement;
 
     if (input.files && input.files[0]){
@@ -170,6 +298,18 @@ export class ClientesFormComponent {
       }else{
         this.imagePreviewSrc = "images/standard-profile-picture.jpg";
       }
+    }
+  }
+
+  deleteImage(): void{
+    if(this.routerType == 'register'){
+      const input = this.file.nativeElement as HTMLInputElement;
+      input.value = '';
+      this.imagePreviewSrc = this.standardPhoto;
+    }
+
+    if (this.routerType == 'edit'){
+      this.imagePreviewSrc = this.standardPhoto;
     }
   }
 
@@ -197,8 +337,62 @@ export class ClientesFormComponent {
     });
   }
 
-  formatPostCode(value: string): string{
+  maskPostCode(value: string): string{
     const mask = "##.###-###";
+
+    let onlynumbers: string = value.replace(/\D/g, '');
+    let valueLength: number = 0;
+    if(onlynumbers.length == 0){return ""}
+
+    valueLength = onlynumbers.length;
+
+    let maskedValue = "";
+    
+    for(let i = 0; i < mask.length; i++){
+        if(valueLength === 0){break}
+
+        if(mask[i] === "#"){
+            maskedValue += onlynumbers[0];
+            onlynumbers = onlynumbers.substring(1);
+            valueLength--;
+          }
+        else{
+            maskedValue += mask[i];
+        }
+    }
+
+    return maskedValue;
+  }
+
+  maskPhoneNumber(value: string): string{
+    const mask = "(##) #####-####";
+
+    let onlynumbers: string = value.replace(/\D/g, '');
+    let valueLength: number = 0;
+    if(onlynumbers.length == 0){return ""}
+
+    valueLength = onlynumbers.length;
+
+    let maskedValue = "";
+    
+    for(let i = 0; i < mask.length; i++){
+        if(valueLength === 0){break}
+
+        if(mask[i] === "#"){
+            maskedValue += onlynumbers[0];
+            onlynumbers = onlynumbers.substring(1);
+            valueLength--;
+          }
+        else{
+            maskedValue += mask[i];
+        }
+    }
+
+    return maskedValue;
+  }
+
+  maskDateFormat(value: string): string{
+    const mask = "##/##/####";
 
     let onlynumbers: string = value.replace(/\D/g, '');
     let valueLength: number = 0;
@@ -233,5 +427,9 @@ export class ClientesFormComponent {
 
       img.src = url;
     });
+  }
+
+  getServices(): void{
+
   }
 }
