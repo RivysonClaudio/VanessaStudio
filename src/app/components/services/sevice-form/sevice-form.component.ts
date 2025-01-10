@@ -39,6 +39,8 @@ export class SeviceFormComponent {
 
           xhr.open("GET", "http://localhost:8080/api/servicos/v1/" + this.serviceId, false)
 
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
           xhr.onload = () => {
             if(xhr.status == 200){
               
@@ -88,7 +90,7 @@ export class SeviceFormComponent {
 
     const xhr: XMLHttpRequest = new XMLHttpRequest();
 
-    xhr.open("POST", "http://localhost:8080/api/servicos/v1/", false);
+    xhr.open("POST", "http://localhost:8080/api/servicos/v1", false);
 
     xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -137,6 +139,8 @@ export class SeviceFormComponent {
         const xhr: XMLHttpRequest = new XMLHttpRequest();
 
         xhr.open("DELETE", `http://localhost:8080/api/servicos/v1/delete/${this.serviceId}`, false);
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
     
         xhr.onload = () => {
           if (xhr.status == 204){

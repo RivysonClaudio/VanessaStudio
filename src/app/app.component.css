@@ -114,6 +114,7 @@ aside li a{
     cursor: pointer;
     padding: 5px 0px;
     color: white;
+    aspect-ratio: 1 / 1;
 }
 
 aside li a:hover{

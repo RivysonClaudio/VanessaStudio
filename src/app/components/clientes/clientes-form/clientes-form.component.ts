@@ -48,7 +48,9 @@ export class ClientesFormComponent {
 
             const xhr = new XMLHttpRequest();
 
-            xhr.open("GET", "http://localhost:8080/api/clientes/v1/" + this.clientId, false)
+            xhr.open("GET", "http://localhost:8080/api/clientes/v1/" + this.clientId, false);
+
+            xhr.setRequestHeader('Content-Type', 'application/json');
 
             xhr.onload = () => {
               if(xhr.status == 200){
@@ -139,13 +141,13 @@ export class ClientesFormComponent {
     formData.append('nome'      , this.form.get('clientName')?.value);
     formData.append('apelido'   , this.form.get('clientNick')?.value);
     if(this.form.get('clientPhone1')?.value != null && this.form.get('clientPhone1')?.value != ''){
-      formData.append('telefone' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
+      formData.append('telefones' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
     }
     if(this.form.get('clientPhone2')?.value != null && this.form.get('clientPhone2')?.value != ''){
-      formData.append('telefone' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
+      formData.append('telefones' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
     }
     if(this.form.get('clientPhone3')?.value != null && this.form.get('clientPhone3')?.value != ''){
-      formData.append('telefone' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
+      formData.append('telefones' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
     }
 
     formData.append('nascimento', this.form.get('clientBirth')?.value);
@@ -180,8 +182,6 @@ export class ClientesFormComponent {
   }
 
   onEdit(): void{
-    const apiEndpointUpdate: string = "http://localhost:8080/api/clientes/v1/update";
-
     const formData = new FormData();
     const input = this.file.nativeElement as HTMLInputElement;
     const file = input.files && input.files[0] ? input.files[0] : null
@@ -192,7 +192,7 @@ export class ClientesFormComponent {
 
       const xhr = new XMLHttpRequest();
 
-      xhr.open("PUT", `${apiEndpointUpdate}?clienteId=${this.clientId}&uriImagemDelete=${this.clientData.fotoPath}`, false);
+      xhr.open("PUT", `http://localhost:8080/api/clientes/v1/${this.clientId}?urlFile=${this.clientData.fotoPath}`, false);
   
       xhr.onload = () => {
         if (xhr.status == 200){
@@ -206,7 +206,9 @@ export class ClientesFormComponent {
     if (this.imagePreviewSrc == this.standardPhoto && this.clientData.fotoPath != 'null'){
       const xhr = new XMLHttpRequest();
 
-      xhr.open("DELETE", `http://localhost:8080/api/clientes/v1/deleteFile?id=${this.clientId}&urlFile=${this.clientData.fotoPath}`, false);
+      xhr.open("DELETE", `http://localhost:8080/api/clientes/v1/${this.clientId}/file?urlFile=${this.clientData.fotoPath}`, false);
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
   
       xhr.onload = () => {
         if (xhr.status == 204){
@@ -224,13 +226,13 @@ export class ClientesFormComponent {
 
     formData.append('nome'      , this.form.get('clientName')?.value);
     formData.append('apelido'   , this.form.get('clientNick')?.value);
-    formData.append('telefone' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
+    formData.append('telefones' , this.form.get('clientPhone1')?.value.replace(/\D/g, ''));
 
     if(this.form.get('clientPhone2')?.value != null && this.form.get('clientPhone2')?.value != ''){
-      formData.append('telefone' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
+      formData.append('telefones' , this.form.get('clientPhone2')?.value.replace(/\D/g, ''));
     }
     if(this.form.get('clientPhone3')?.value != null && this.form.get('clientPhone3')?.value != ''){
-      formData.append('telefone' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
+      formData.append('telefones' , this.form.get('clientPhone3')?.value.replace(/\D/g, ''));
     }
 
     formData.append('nascimento', this.form.get('clientBirth')?.value);
@@ -248,13 +250,16 @@ export class ClientesFormComponent {
       formData.append('endereco.localidade' , this.form.get('clientCity')?.value);
     }
 
+    console.log(formData)
+
     const xhr = new XMLHttpRequest();
 
-    xhr.open("PUT", `${apiEndpointUpdate}?clienteId=${this.clientId}`, false);
+    xhr.open("PUT", `http://localhost:8080/api/clientes/v1/${this.clientId}`, false);
 
     xhr.onload = () => {
       if (xhr.status == 200){
         this.app.notify("As alterações foram salvas.", 3000);
+        this.router.navigate(['/clientes']);
       }
     }
 
@@ -268,7 +273,9 @@ export class ClientesFormComponent {
       () => {
         const xhr = new XMLHttpRequest();
 
-        xhr.open("DELETE", "http://localhost:8080/api/clientes/v1/deleteCustomer/" + this.clientId, false);
+        xhr.open("DELETE", "http://localhost:8080/api/clientes/v1/" + this.clientId, false);
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
     
         xhr.onload = () => {
           if (xhr.status == 204){

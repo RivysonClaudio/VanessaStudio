@@ -42,6 +42,8 @@ export class SeviceListComponent {
 
       xhr.open("GET", "http://localhost:8080/api/servicos/v1/", false);
 
+      xhr.setRequestHeader('Content-Type', 'application/json')
+
       xhr.onload = () => {
         if (xhr.status == 200){
           resolve(JSON.parse(xhr.responseText))

@@ -23,7 +23,7 @@ export class WorkerPanelComponent {
     .then(() => {
       for(let i = 0; i < this.profissionals.length; i++){
         const phones = this.profissionals[i].telefones;
-
+        this.profissionals[i].dataCriacao = this.profissionals[i].dataCriacao.split('T')[0].split('-').reverse().join('/');
         for(let j = 0; j < phones.length; j++){
           this.profissionals[i].telefones[j] = this.maskPhoneNumber(this.profissionals[i].telefones[j]);
         } 
@@ -73,7 +73,9 @@ export class WorkerPanelComponent {
     return new Promise((resolve, reject) => {
       const xhr : XMLHttpRequest = new XMLHttpRequest();
 
-      xhr.open("GET", "http://localhost:8080/api/profissional/v1/", false);
+      xhr.open("GET", "http://localhost:8080/api/profissionais/v1/", false);
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
   
       xhr.onload = () => {
         if(xhr.status == 200){
@@ -95,7 +97,7 @@ export class WorkerPanelComponent {
         this.form.get('workerPhone2')?.setValue(p.telefones[1]);
         this.form.get('workerPhone3')?.setValue(p.telefones[2]);
         this.form.get('workerRate')?.setValue(p.porcentagemRepasse.toString() + "%");
-        this.form.get('workerRegister')?.setValue(p.dataCriacao);
+        this.form.get('workerRegister')?.setValue(p.dataCriacao.split('T')[0].split('-').reverse().join('/'));
       }
     });
 
@@ -120,7 +122,7 @@ export class WorkerPanelComponent {
 
     const xhr : XMLHttpRequest = new XMLHttpRequest();
 
-    xhr.open("POST", "http://localhost:8080/api/profissional/v1/", false);
+    xhr.open("POST", "http://localhost:8080/api/profissionais/v1", false);
 
     xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -153,7 +155,9 @@ export class WorkerPanelComponent {
       }, () => {
         const xhr : XMLHttpRequest = new XMLHttpRequest();
 
-        xhr.open("DELETE", "http://localhost:8080/api/profissional/v1/delete/" + this.currentSelectedId, false);
+        xhr.open("DELETE", "http://localhost:8080/api/profissionais/v1/" + this.currentSelectedId, false);
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
     
         xhr.onload = () => {
           if(xhr.status == 204){
@@ -205,7 +209,7 @@ export class WorkerPanelComponent {
 
     const xhr : XMLHttpRequest = new XMLHttpRequest();
 
-    xhr.open("PUT", "http://localhost:8080/api/profissional/v1/update?id=" + this.currentSelectedId, false);
+    xhr.open("PUT", "http://localhost:8080/api/profissionais/v1/" + this.currentSelectedId, false);
 
     xhr.setRequestHeader('Content-Type', 'application/json');
 

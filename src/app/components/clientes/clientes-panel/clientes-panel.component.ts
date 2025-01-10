@@ -40,6 +40,8 @@ export class ClientesPanelComponent {
       const xhr = new XMLHttpRequest();
 
       xhr.open("GET", this.api_url, true);
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
   
       xhr.onload = function (){
         if (xhr.status === 200){
