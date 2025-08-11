@@ -1,0 +1,130 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+
+    font-family: Roboto, sans-serif;
+}
+
+a{
+    text-decoration: none;
+}
+
+.return-serviceList,
+.Empty-Space{
+    width: 5%;
+    text-align: center;
+    color: white;
+}
+
+.servicos-header{
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+.servicos-header div h2{
+    font-family: "PermanentMarker", cursive;
+    color: var(--dark-pink);
+    margin: 0% 5%;
+    width: max-content;
+}
+
+.serviceForm-content{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.space-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.serviceForm-content .space-bar:last-child{
+    position: absolute;
+    bottom: 0;
+}
+
+.serviceForm-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    position: absolute;
+    height: calc(100% - 72px);
+    width: 100%;
+    top: 36px; 
+    overflow: auto; 
+}
+
+form{
+    margin-top: 2%;
+    background-color: var(--mid-pink);
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    width: 45%;
+    border-radius: 5px;
+}
+
+form label{
+    display: flex;
+    margin: 15px 0px;
+    width: 100%;
+    align-items: center;
+}
+
+form label legend{
+    width: 15%;
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+form label select,
+form label input{
+    padding: 5px;
+    width: 90%;
+    outline: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.form-buttons{
+    margin-top: 25px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.form-buttons :nth-child(1){
+    width: 15%;
+    background-color: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    font-size: medium;
+}
+
+.form-buttons :nth-child(2){
+    width: 15%;
+    background-color: var(--dark-pink);
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    font-size: medium;
+    border-radius: 5px;
+}

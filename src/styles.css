@@ -32,6 +32,13 @@ body{
     font-style: normal;
 }
 
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Black.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
 .space-bar{
     width: 100%;
     height: 36px;

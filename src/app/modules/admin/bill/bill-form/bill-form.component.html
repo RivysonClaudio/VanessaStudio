@@ -1,0 +1,178 @@
+<div class="bills-header">
+    <a class="return-billsList" routerLink="/admin/comandas">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#F25C93">
+                <path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z"/>
+        </svg>
+    </a>
+    <h2>NOVA COMANDA</h2>
+    <span></span>
+</div>
+<hr>
+<div class="billsForm-content">
+    <div class="space-bar">
+        <div class="selectBillStatusWrapper">
+            <div class="billStatusBox" [ngClass]="billStatus+'-BG'">
+                <h4>{{billStatus}}</h4>
+            </div>
+            <div class="billStatusButton" (click)="handleOptionsBox('status')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path d="M480-360 280-560h400L480-360Z"/>
+                </svg>
+            </div>
+            @if(statusOptionsBox){
+                <div class="billStatusOptionsBox">
+                    <h4 (click)="setBillStatus('AGENDADA')">AGENDADA</h4>
+                    <h4 (click)="setBillStatus('FINALIZADA')">FINALIZADA</h4>
+                    <h4 (click)="setBillStatus('CANCELADA')">CANCELADA</h4>
+                </div>
+            }
+        </div>
+        <h3>COMANDA Nº {{billNumber}}</h3>
+        <div class="billDateBox">
+            <h4>{{billDate}}</h4>
+        </div>
+    </div>
+    <div class="billsFormContainer">
+        <div class="billBody">
+            <div class="billClientWrapper">
+                <legend>Cliente</legend>
+                <legend>Contato</legend>
+                <div (click)="handleOptionsBox('client')">{{billClientName}}</div>
+                <div>{{billClientPhone}}</div>
+                @if(clientsOptionsBox){
+                    <div class="billClientListBox">
+                        <input #clientInputFilter type="text" placeholder="Pesquisar Cliente" (input)="setFilter(clientInputFilter.value, 'client')">
+                        <ul>
+                            @for(client of clientList; track client.id){
+                                <li (click)="setBillClient({id: client.id, name: client.nome, phone: maskPhoneNumber(client.telefones[0])})">
+                                    <legend>{{client.nome}}</legend>
+                                    <legend>{{maskPhoneNumber(client.telefones[0])}}</legend>
+                                </li>
+                            }
+                            @empty {
+                                <li (click)="handleOptionsBox('client')">
+                                    <legend>Nenhum Cliente Encontrado</legend>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="billServicesWrapper">
+                <legend>Descrição dos serviços</legend>
+                <div class="billServicesListContainer">
+                    @if(newServiceView){
+                        <div class="billServicesListContent">
+                            @for(bill of billServices; track bill.id){
+                                <div class="billServiceCard" [id]="bill.id">
+                                    <legend>{{bill.serviceCategory}}</legend>
+                                    <legend>{{bill.serviceDescription}}</legend>
+                                    <legend>R$ {{maskCurrency((bill.serviceValue * 100).toString())}}</legend>
+                                    <legend>{{bill.workerName}}</legend>
+                                    <div class="billServiceCard-Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#f25c93" (click)="deleteServiceBill(bill.id)">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @else {
+                        <div class="billNewServiceContent" [ngClass]="newServiceViewClass">
+                            <span>
+                                <div (click)="newServiceViewHandler('close')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#f25c93">
+                                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                                    </svg>
+                                </div>
+                            </span>
+                            <legend>Serviço</legend>
+                            <div class="newServiceSelectBox">
+                                <span>
+                                    @if(newService.active){
+                                        <div>{{newService.category}}</div>
+                                        <div>{{newService.description}}</div>
+                                        <div>{{newService.value}}</div>
+                                    }
+                                    @else {
+                                        <div>Selecione um serviço</div>
+                                    }
+                                </span>
+                                <div class="newServiceSelectButton" (click)="handleOptionsBox('service')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                                        <path d="M480-360 280-560h400L480-360Z"/>
+                                    </svg>
+                                </div>
+                                @if(servicesOptionsBox){
+                                    <div class="billServiceListBox">
+                                        <input #serviceInputFilter type="text" placeholder="Pesquisar Serviço" (input)="setFilter(serviceInputFilter.value, 'service')">
+                                        <ul>
+                                            @for(service of servivesList; track service.id){
+                                                <li (click)="setBillNewService(service)">
+                                                    <legend>{{service.tipoServico}}</legend>
+                                                    <legend>{{service.descricao}}</legend>
+                                                    <legend>R$ {{maskCurrency((service.valorServico * 100).toString())}}</legend>
+                                                </li>
+                                            }
+                                            @empty {
+                                                <li (click)="handleOptionsBox('service')">
+                                                    <legend style="text-align: center; width: 100%;">Nenhum Serviço Encontrado</legend>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <legend>Profissional</legend>
+                            <div class="newServiceSelectBox">
+                                <span>
+                                    @if(newWorker.active){
+                                        <div>{{newWorker.name}}</div>
+                                    }
+                                    @else {
+                                        <div>Selecione um profissional</div>   
+                                    }
+                                </span>
+                                <div class="newServiceSelectButton" (click)="handleOptionsBox('worker')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                                        <path d="M480-360 280-560h400L480-360Z"/>
+                                    </svg>
+                                </div>
+                                @if(workersOptionsBox){
+                                    <div class="billWorkerListBox">
+                                        <input #workerInputFilter type="text" placeholder="Pesquisar Profissional" (input)="setFilter(workerInputFilter.value, 'worker')">
+                                        <ul>
+                                            @for(worker of workersList; track worker.id){
+                                                <li (click)="setBillNewWorker(worker)">
+                                                    <legend>{{worker.nome}}</legend>
+                                                </li>
+                                            }
+                                            @empty {
+                                                <li (click)="handleOptionsBox('worker')">
+                                                    <legend>Nenhum Profissional Encontrado</legend>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <button (click)="addBillNewBillService()">Confirmar</button>
+                        </div>
+                    }
+                </div>
+                <button (click)="newServiceViewHandler('open')">Novo Item</button>
+            </div>
+            <div class="billMoreWrapper">
+                <legend>Informações Complementares</legend>
+                <textarea [(ngModel)]="billMoreInfo"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="space-bar">
+        <span></span>
+        <button (click)="saveNewBill()">Confirmar</button>
+        <div>R$ {{maskCurrency((billTotalValue * 100).toString())}}</div>
+    </div>
+</div>
+

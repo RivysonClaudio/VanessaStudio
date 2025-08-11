@@ -1,0 +1,217 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+
+  font-family: Roboto, sans-serif;
+}
+
+a{
+  text-decoration: none;
+}
+
+.servicos-container{
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.servicos-header{
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.servicos-header h2{
+  font-family: "PermanentMarker", cursive;
+  color: var(--dark-pink);
+  margin: 0% 5%;
+}
+
+.filter-container{
+  display: flex;
+  width: 40%;
+  justify-content: center;
+  position: relative;
+}
+
+.servicos-pesquisar-button{
+  background-color: var(--dark-pink);
+  border-radius: 0% 15% 15% 0%;
+  padding: 4.5px;
+
+  cursor: pointer;
+  
+  height: min-content;
+}
+
+#servicos-pesquisar-filtro{
+  width: 100%;
+  padding: 5px 10px;
+
+  font-size: medium;
+
+  outline: none;
+  border: 1px solid var(--mid-pink);
+  border-radius: 5px 0px 0px 5px;
+}
+
+#servicos-pesquisar-filtro:focus{
+  outline: 1.5px solid var(--dark-pink);
+}
+
+.servicos-pesquisar-button svg{
+  display: flex;
+}
+
+.novo-servico-button-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #F2BDD0;
+  border-radius: 5px;
+  padding: 8px 12px;
+
+  cursor: pointer;
+  margin: 0% 5%;
+}
+
+.novo-servico-button-container svg{
+  display: flex;
+  transform: rotate(45deg);
+  fill: #F25C93;
+}
+
+.novo-servico-button-container legend{
+  color: #F25C93;
+  margin-left: 10px;
+  font-size: 80%;
+}
+
+.novo-servico-button-container:hover{
+  background-color: #F2BDD0;
+}
+
+.novo-servico-button-container:hover svg{
+  fill: white;
+}
+
+.novo-servico-button-container:hover legend{
+  color: white;
+}
+
+.serviceList-content{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.space-bar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.serviceList-content .space-bar:first-child :nth-child(1),
+.serviceList-content .space-bar:first-child :nth-child(3),
+.serviceList-content .space-bar:first-child :nth-child(4){
+  width: 15%;
+  color: white;
+  text-align: center;
+}
+
+.serviceList-content .space-bar:first-child :nth-child(2){
+  width: 35%;
+  color: white;
+  padding-left: 15px;
+}
+
+.serviceList-content .space-bar:last-child{
+  position: absolute;
+  bottom: 0;
+}
+
+.services-grid-wrapper{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  height: calc(100% - 102px);
+  width: 100%;
+  top: 36px; 
+  overflow: auto; 
+  margin-top: 20px;
+}
+
+.service-grid-content{
+  width: 80%;
+}
+
+.service-grid-row{
+  width: 100%;
+  display: flex;
+  border-top: 1px solid #F25C93;
+  border-bottom: 1px solid #F25C93;
+  border-right: 3px solid #F25C93;
+  background-color: white;
+  align-items: center;
+  margin-top: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.service-grid-row :nth-child(1),
+.service-grid-row :nth-child(3),
+.service-grid-row :nth-child(4){
+  width: 18.75%;
+  text-align: center;
+}
+
+.service-grid-row :nth-child(2){
+  width: 43.75%;
+  padding-left: 15px;
+}
+
+.service-grid-row h4{
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.service-grid-row :nth-child(1) h4{
+  justify-self: center;
+  background-color: var(--dark-pink);
+  width: 100%;
+  height: 100%;
+  font-weight: 600;
+  color: white;
+  font-size: 0.8rem;
+  min-width: fit-content;
+  padding: 0.8rem 0px;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1.5px;
+}
+
+.space-bar legend{
+  width: 100%;
+  text-align: center;
+  font-size: smaller;
+  color: white;
+  font-weight: 600;
+  padding-right: 15px;
+}
+
+.row-bottom-spacing{
+  height: 15px;
+}

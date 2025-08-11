@@ -1,0 +1,126 @@
+.hair{
+    position: fixed;
+    left: 0; top: 50vh;
+    width: 100vw; height: 10vh;
+    background-image: url(/images/hair_gemini_2_bg.png);
+    background-repeat: repeat-x;
+}
+.hair:nth-of-type(1){
+    top: 75vh;
+    animation: mover 22s linear infinite;
+    background-size: 500px 150px;
+}
+.hair:nth-of-type(2){
+    top: 70vh;
+    animation: mover 28s linear infinite;
+    background-size: 200px 125px;
+}
+.hair:nth-of-type(3){
+    top: 65vh;
+    animation: mover 24s linear infinite;
+    background-size: 300px 60px;
+}
+.hair:nth-of-type(4){
+    top: 60vh;
+    animation: mover 30s linear infinite;
+    background-size: 600px 100px;
+}
+.hair:nth-of-type(5){
+    top: 55vh;
+    animation: mover 33s linear infinite;
+    background-size: 250px 140px;
+}
+.hair:nth-of-type(6){
+    top: 50vh;
+    animation: mover 26s linear infinite;
+    background-size: 320px 90px;
+}
+.hair:nth-of-type(7){
+    top: 45vh;
+    animation: mover 35s linear infinite;
+    background-size: 450px 80px;
+}
+.hair:nth-of-type(8){
+    top: 40vh;
+    animation: mover 29s linear infinite;
+    background-size: 280px 130px;
+}
+.hair:nth-of-type(9){
+    top: 35vh;
+    animation: mover 31s linear infinite;
+    background-size: 360px 70px;
+}
+.hair:nth-of-type(10){
+    top: 30vh;
+    animation: mover 27s linear infinite;
+    background-size: 400px 120px;
+}
+.hair:nth-of-type(11){
+    top: 25vh;
+    animation: mover 34s linear infinite;
+    background-size: 240px 110px;
+}
+.hair:nth-of-type(12){
+    top: 20vh;
+    animation: mover 36s linear infinite;
+    background-size: 520px 95px;
+}
+.hair:nth-of-type(13){
+    top: 15vh;
+    animation: mover 32s linear infinite;
+    background-size: 310px 105px;
+}
+.hair:nth-of-type(14){
+    top: 10vh;
+    animation: mover 38s linear infinite;
+    background-size: 470px 90px;
+}
+.hair:nth-of-type(15){
+    top: 5vh;
+    animation: mover 41s linear infinite;
+    background-size: 330px 85px;
+}
+.hair:nth-of-type(16){
+    top: 0vh;
+    animation: mover 45s linear infinite;
+    background-size: 390px 70px;
+}
+.hair:nth-of-type(17){
+    top: 85vh;
+    animation: mover 40s linear infinite;
+    background-size: 350px 115px;
+}
+.hair:nth-of-type(18){
+    top: 90vh;
+    animation: mover 37s linear infinite;
+    background-size: 300px 95px;
+}
+.hair:nth-of-type(19){
+    top: 95vh;
+    animation: mover 43s linear infinite;
+    background-size: 280px 125px;
+}
+.hair:nth-of-type(20){
+    top: 98vh;
+    animation: mover 39s linear infinite;
+    background-size: 250px 100px;
+}
+.hair:nth-of-type(21){
+    top: 100vh;
+    animation: mover 44s linear infinite;
+    background-size: 520px 110px;
+}
+.hair:nth-of-type(22){
+    top: 92vh;
+    animation: mover 42s linear infinite;
+    background-size: 310px 90px;
+}
+
+@keyframes mover {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 2000px;
+    }
+}

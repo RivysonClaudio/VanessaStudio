@@ -1,0 +1,84 @@
+:host{
+    background-color: #F2BDD0;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/**/
+
+.logo-container{
+    position: relative;
+}
+.logo-inner{
+    display: flex;
+}
+.logo-inner h1{
+    font-family: "PermanentMarker", cursive;
+    color: #F25C93;
+    font-size: 6rem;
+    transition: transform 300ms ease-in-out;
+}
+.logo-inner:hover h1 {
+    transform: scale(1.2);
+}
+.logo-inner:hover h1:nth-child(1) {
+    transition-delay: 50ms; /* Primeiro h1 com 50ms de atraso */
+}
+.logo-inner:hover h1:nth-child(2) {
+    transition-delay: 100ms; /* Segundo h1 com 100ms de atraso */
+}
+.logo-inner:hover h1:nth-child(3) {
+    transition-delay: 150ms; /* Terceiro h1 com 150ms de atraso */
+}
+.logo-inner:hover h1:nth-child(4) {
+    transition-delay: 200ms; /* Quarto h1 com 200ms de atraso */
+}
+.logo-inner:hover h1:nth-child(5) {
+    transition-delay: 250ms; /* Quinto h1 com 250ms de atraso */
+}
+.logo-inner:hover h1:nth-child(6) {
+    transition-delay: 300ms; /* Sexto h1 com 300ms de atraso */
+}
+.logo-inner:hover h1:nth-child(7) {
+    transition-delay: 350ms; /* Sétimo h1 com 350ms de atraso */
+}
+.logo-container h6{
+    font-family: "DancingScript", cursive;
+    color: white;
+    font-size: 3rem;
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+}
+
+/**/
+
+form{
+    background-color: white;
+    padding: 25px;
+    margin: 25px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form input{
+    outline: none;
+    padding: 10px;
+    margin: 10px;
+    min-width: 250px;
+}
+form button{
+    padding: 10px 25px;
+    margin: 15px;
+    background-color: #F2BDD0;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
