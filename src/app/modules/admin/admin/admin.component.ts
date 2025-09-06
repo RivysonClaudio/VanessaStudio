@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ModalComponent } from '../modal/modal.component';
+import { DashboardService } from '../../../services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,6 +17,14 @@ export class AdminComponent {
   isModalOpen = false;
   modalData = {title: '', message: ''};
   private callback?: () => void;
+
+  constructor(private dashboard: DashboardService){
+    
+  }
+
+  async ngOnInit(){
+    await this.dashboard.init();
+  }
 
   notify(message: string, time: number): void{
     this.notificationMessage = message;

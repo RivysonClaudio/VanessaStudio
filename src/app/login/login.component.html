@@ -6,7 +6,10 @@
 </div>
 
 <form action="javascript:void(0)">
-    <input type="email" placeholder="Login">
-    <input type="password" placeholder="Senha">
-    <button routerLink="/admin/home">Entrar</button>
+    <input type="email" placeholder="Usuário" (input)="set_username($event)">
+    <input type="password" placeholder="Senha" (input)="set_password($event)">
+    @if(!validation){
+        <span>Email e/ou Senha inválidos.</span>
+    }
+    <button (click)="login()">Entrar</button>
 </form>

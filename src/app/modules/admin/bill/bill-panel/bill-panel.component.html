@@ -40,6 +40,22 @@
             <div>{{balance}}</div>
         </div>
         <div class="billLoweContent">
+            <legend (click)="viewBills('NONSTARTED')">NÃO INICIADA - {{finished_Bills.length}}</legend>
+            @if(viewFinished_Bills){
+                @for(bill of finished_Bills; track bill.id){
+                    <div class="billCard" style="background-color: #CDECBF;" routerLink="consulta/{{bill.numeroSerie}}">
+                        <div class="billCardHeader">
+                            <legend>COMANDA Nº</legend>
+                            <legend>{{bill.numeroSerie}}</legend>
+                        </div>
+                        <div class="billCardContent">
+                            <legend>{{bill.clienteNome}}</legend>
+                            <legend>{{bill.dataComanda.split('T')[0].split('-').reverse().join('/')}}</legend>
+                            <legend>R$ {{maskCurrency((bill.valorTotal * 100).toString())}}</legend>
+                        </div>
+                    </div>
+                }
+            }
             <legend (click)="viewBills('FINISHED')">REALIZADAS - {{finished_Bills.length}}</legend>
             @if(viewFinished_Bills){
                 @for(bill of finished_Bills; track bill.id){

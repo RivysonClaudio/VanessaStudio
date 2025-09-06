@@ -1,56 +1,55 @@
-<div class="bills-header">
-    <a class="return-billsList" routerLink="/admin/comandas">
+<div class="invoice-header">
+    <a class="return-to-invoice-panel" routerLink="/admin/comandas">
         <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#F25C93">
                 <path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z"/>
         </svg>
     </a>
-    <h2>NOVA COMANDA</h2>
+
+    @if(routerType === 'register'){
+        <h2>NOVA COMANDA</h2>
+    }
+
+    @if(routerType === 'edit'){
+        <h2>COMANDA Nº {{ invoice.number }}</h2>
+    }
+    
     <span></span>
 </div>
 <hr>
-<div class="billsForm-content">
+<div class="invoice-form-content">
+
     <div class="space-bar">
-        <div class="selectBillStatusWrapper">
-            <div class="billStatusBox" [ngClass]="billStatus+'-BG'">
-                <h4>{{billStatus}}</h4>
-            </div>
-            <div class="billStatusButton" (click)="handleOptionsBox('status')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                    <path d="M480-360 280-560h400L480-360Z"/>
-                </svg>
-            </div>
-            @if(statusOptionsBox){
-                <div class="billStatusOptionsBox">
-                    <h4 (click)="setBillStatus('AGENDADA')">AGENDADA</h4>
-                    <h4 (click)="setBillStatus('FINALIZADA')">FINALIZADA</h4>
-                    <h4 (click)="setBillStatus('CANCELADA')">CANCELADA</h4>
-                </div>
+        <div>
+            @if(invoice_modified){
+                <span>(Alterações não salvas)</span>
             }
-        </div>
-        <h3>COMANDA Nº {{billNumber}}</h3>
-        <div class="billDateBox">
-            <h4>{{billDate}}</h4>
+            <input readonly type="date" class="invoice-date" disabled [value]="invoice.date.split('T')[0]">
         </div>
     </div>
-    <div class="billsFormContainer">
-        <div class="billBody">
-            <div class="billClientWrapper">
+
+    <div class="invoice-form-main">
+        <div class="invoice-body">
+
+            <div class="invoice-client-wrapper">
                 <legend>Cliente</legend>
                 <legend>Contato</legend>
-                <div (click)="handleOptionsBox('client')">{{billClientName}}</div>
-                <div>{{billClientPhone}}</div>
-                @if(clientsOptionsBox){
-                    <div class="billClientListBox">
-                        <input #clientInputFilter type="text" placeholder="Pesquisar Cliente" (input)="setFilter(clientInputFilter.value, 'client')">
-                        <ul>
-                            @for(client of clientList; track client.id){
-                                <li (click)="setBillClient({id: client.id, name: client.nome, phone: maskPhoneNumber(client.telefones[0])})">
-                                    <legend>{{client.nome}}</legend>
-                                    <legend>{{maskPhoneNumber(client.telefones[0])}}</legend>
+
+                <input type="text" (click)="toggleVisibility('client_searchbox')" [value]="invoice.client_name" placeholder="nome completo do cliente" (input)="filter_box('clients', $event)">
+                <input type="text" (click)="toggleVisibility('client_searchbox')" [value]="utils.phoneNumberFormatter(invoice.client_phone)" placeholder="(__) _____-____">
+
+                @if(isOpen.client_searchbox && routerType === 'register'){
+                    <div class="invoice-client-box">
+                        <ul #invoice_client_ul>
+                            @for(client of clients_list; track client.id)
+                            {
+                                <li (click)="set_invoice_client(client)">
+                                    <legend>{{ client.name }}</legend>
+                                    <legend>{{ utils.phoneNumberFormatter(client.phones[0]) }}</legend>
                                 </li>
                             }
-                            @empty {
-                                <li (click)="handleOptionsBox('client')">
+                            @empty 
+                            {
+                                <li (click)="toggleVisibility('client_searchbox')">
                                     <legend>Nenhum Cliente Encontrado</legend>
                                 </li>
                             }
@@ -58,121 +57,161 @@
                     </div>
                 }
             </div>
-            <div class="billServicesWrapper">
+
+            <div class="invoice-procedure-list-wrapper">
+
                 <legend>Descrição dos serviços</legend>
-                <div class="billServicesListContainer">
-                    @if(newServiceView){
-                        <div class="billServicesListContent">
-                            @for(bill of billServices; track bill.id){
-                                <div class="billServiceCard" [id]="bill.id">
-                                    <legend>{{bill.serviceCategory}}</legend>
-                                    <legend>{{bill.serviceDescription}}</legend>
-                                    <legend>R$ {{maskCurrency((bill.serviceValue * 100).toString())}}</legend>
-                                    <legend>{{bill.workerName}}</legend>
-                                    <div class="billServiceCard-Delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#f25c93" (click)="deleteServiceBill(bill.id)">
-                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                                        </svg>
+
+                <div class="invoice-procedure-content">
+                    
+                    @if(isOpen.procedure_form){
+
+                        <div class="invoice-procedure-list">
+
+                            @for(procedure of invoice.procedures; track procedure.id; let idx = $index){
+
+                                <div class="procedure-card" [id]="procedure.id">
+                                    <div class="procedure-details">
+
+                                        <h3>#{{ idx + 1 }}</h3>
+
+                                        <select [value]="procedure.status" (change)="set_invoice_procedure_status(procedure.id, $event)">
+                                            <option value="AGENDADA">AGENDADA</option>
+                                            <option value="EM_ATENDIMENTO">EM ATENDIMENTO</option>
+                                            <option value="FINALIZADA">FINALIZADA</option>
+                                            <option value="CANCELADA">CANCELADA</option>
+                                        </select>
+
+                                        <span>{{ procedure.category }}</span>
+
+                                        <select name="" id="">
+                                            <option value="0" disabled selected>Forma de Pagamento</option>
+                                            <option value="DINHEIRO">DINHEIRO</option>
+                                            <option value="PIX">PIX</option>
+                                            <option value="CARTÃO">CARTÃO</option>
+                                        </select>
+                                        
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="pink">
+                                                <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"></path>
+                                            </svg>
+                                            <span>{{ procedure.professional_name }}</span>
+                                        </span>
+
+                                        @if(routerType === 'register'){
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="pink" (click)="remove_invoice_procedure(procedure)">
+                                                <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                            </svg>
+                                        }@else {
+                                            <div></div>
+                                        }
+
+                                    </div>
+                                    <div class="procedure-resume">
+                                        <span>{{ procedure.description }}</span>
+                                        <span>{{ utils.currencyFormatter(procedure.ammount.toFixed(2)) }}</span>
                                     </div>
                                 </div>
+
                             }
+
                         </div>
+
                     }
                     @else {
-                        <div class="billNewServiceContent" [ngClass]="newServiceViewClass">
-                            <span>
-                                <div (click)="newServiceViewHandler('close')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#f25c93">
-                                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
-                                    </svg>
-                                </div>
-                            </span>
-                            <legend>Serviço</legend>
-                            <div class="newServiceSelectBox">
-                                <span>
-                                    @if(newService.active){
-                                        <div>{{newService.category}}</div>
-                                        <div>{{newService.description}}</div>
-                                        <div>{{newService.value}}</div>
-                                    }
-                                    @else {
-                                        <div>Selecione um serviço</div>
-                                    }
-                                </span>
-                                <div class="newServiceSelectButton" (click)="handleOptionsBox('service')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
-                                        <path d="M480-360 280-560h400L480-360Z"/>
-                                    </svg>
-                                </div>
-                                @if(servicesOptionsBox){
-                                    <div class="billServiceListBox">
-                                        <input #serviceInputFilter type="text" placeholder="Pesquisar Serviço" (input)="setFilter(serviceInputFilter.value, 'service')">
-                                        <ul>
-                                            @for(service of servivesList; track service.id){
-                                                <li (click)="setBillNewService(service)">
-                                                    <legend>{{service.tipoServico}}</legend>
-                                                    <legend>{{service.descricao}}</legend>
-                                                    <legend>R$ {{maskCurrency((service.valorServico * 100).toString())}}</legend>
+
+                        <div class="procedure-form">
+
+                            <h4 style="color: gray; text-align: center; margin-bottom: 16px;">Novo serviço</h4>
+
+                            <div class="selection-field">
+                                <legend style="width: 120px; align-self: center; padding-right: 4px;">Serviço</legend>
+                                <input type="text" (click)="toggleVisibility('procedure_select')" [value]="invoice_procedure_standing.description" (input)="filter_box('procedures', $event)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="pink"> <path d="M480-360 280-560h400L480-360Z"/> </svg>
+
+                                @if(isOpen.procedure_select){
+
+                                    <div class="invoice-procedure-box">
+
+                                        <ul #invoice_procedure_ul>
+
+                                            @for(procedure of procedures_list; track procedure.id){
+
+                                                <li (click)="set_invoice_new_procedure_procedure(procedure)">
+                                                    <legend>{{ procedure.category }}</legend>
+                                                    <legend>{{ procedure.description }}</legend>
+                                                    <legend>{{ utils.currencyFormatter(procedure.ammount.toFixed(2)) }}</legend>
                                                 </li>
+
                                             }
-                                            @empty {
-                                                <li (click)="handleOptionsBox('service')">
-                                                    <legend style="text-align: center; width: 100%;">Nenhum Serviço Encontrado</legend>
-                                                </li>
-                                            }
+
                                         </ul>
+
                                     </div>
+
                                 }
+                                
                             </div>
-                            <legend>Profissional</legend>
-                            <div class="newServiceSelectBox">
-                                <span>
-                                    @if(newWorker.active){
-                                        <div>{{newWorker.name}}</div>
-                                    }
-                                    @else {
-                                        <div>Selecione um profissional</div>   
-                                    }
-                                </span>
-                                <div class="newServiceSelectButton" (click)="handleOptionsBox('worker')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
-                                        <path d="M480-360 280-560h400L480-360Z"/>
-                                    </svg>
-                                </div>
-                                @if(workersOptionsBox){
-                                    <div class="billWorkerListBox">
-                                        <input #workerInputFilter type="text" placeholder="Pesquisar Profissional" (input)="setFilter(workerInputFilter.value, 'worker')">
-                                        <ul>
-                                            @for(worker of workersList; track worker.id){
-                                                <li (click)="setBillNewWorker(worker)">
-                                                    <legend>{{worker.nome}}</legend>
+
+                            <div class="selection-field">
+                                <legend style="width: 120px; align-self: center; padding-right: 4px;">Profissional</legend>
+                                <input type="text" (click)="toggleVisibility('professional_select')" [value]="invoice_procedure_standing.professional_name" (input)="filter_box('professionals', $event)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="pink"> <path d="M480-360 280-560h400L480-360Z"/> </svg>
+
+                                @if(isOpen.professional_select){
+
+                                    <div class="invoice-profissional-box">
+
+                                        <ul #invoice_professional_ul>
+
+                                            @for(professional of professionals_list; track professional.id){
+
+                                                <li (click)="set_invoice_new_procedure_professional(professional)">
+                                                    <legend>{{ professional.name }}</legend>
                                                 </li>
+
                                             }
-                                            @empty {
-                                                <li (click)="handleOptionsBox('worker')">
-                                                    <legend>Nenhum Profissional Encontrado</legend>
-                                                </li>
-                                            }
+
                                         </ul>
+
                                     </div>
+
                                 }
+                                
                             </div>
-                            <button (click)="addBillNewBillService()">Confirmar</button>
+
+                            <div class="selection-field">
+                                <button (click)="set_invoice_new_procedure()">Confirmar</button>
+                                <button (click)="toggleVisibility('procedure_form')">Cancelar</button>
+                            </div>
+
                         </div>
+
                     }
                 </div>
-                <button (click)="newServiceViewHandler('open')">Novo Item</button>
+                <button (click)="toggleVisibility('procedure_form')">Novo Item</button>
             </div>
-            <div class="billMoreWrapper">
+
+            <div class="invoice-complement-info-wrapper">
                 <legend>Informações Complementares</legend>
-                <textarea [(ngModel)]="billMoreInfo"></textarea>
+                <textarea [value]="invoice.more_info" (input)="set_invoice_more_info($event)"></textarea>
             </div>
         </div>
     </div>
+
     <div class="space-bar">
         <span></span>
-        <button (click)="saveNewBill()">Confirmar</button>
-        <div>R$ {{maskCurrency((billTotalValue * 100).toString())}}</div>
+
+        @if(routerType === 'register'){
+            <button (click)="submit_invoice(invoice)">Confirmar</button>
+        }
+
+        @if(routerType === 'edit'){
+            <button (click)="update_invoice(invoice)">Atualizar</button>
+        }
+
+        <div>{{ utils.currencyFormatter(invoice.ammount.toFixed(2)) }}</div>
     </div>
+
 </div>
 

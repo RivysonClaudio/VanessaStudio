@@ -61,7 +61,7 @@ form{
     background-color: white;
     padding: 25px;
     margin: 25px;
-    border-radius: 15px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,7 +70,7 @@ form input{
     outline: none;
     padding: 10px;
     margin: 10px;
-    min-width: 250px;
+    min-width: 450px;
 }
 form button{
     padding: 10px 25px;

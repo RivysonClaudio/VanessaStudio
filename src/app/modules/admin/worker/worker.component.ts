@@ -269,12 +269,6 @@ export class WorkerComponent {
     this.requestAllBillsByProfessinalId(this.currentSelectedId)
     .then(response => {
 
-      const dataInicio = new Date(this.initialDateFilter);
-      const dataFim = new Date(this.finalDateFilter);
-
-      console.log(this.initialDateFilter);
-      console.log(this.finalDateFilter);
-
       this.workerServicesList = response.filter((item: any) => {
         if (!item.dataServicoComanda) return false;
 
